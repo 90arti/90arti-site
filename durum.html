@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="tr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<meta http-equiv="Cache-Control" content="no-cache"><meta name="theme-color" content="#0B1B2D">
+<title>90Artı · Sistem durumu</title>
+<link rel="icon" type="image/png" href="/img/favicon.png">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0B1B2D;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#E8EEF5;padding-bottom:32px}
+.wrap{max-width:560px;margin:0 auto}
+.top{padding:18px 16px 14px;border-bottom:1px solid #1C3149;display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:800;font-style:italic;font-size:20px;letter-spacing:-.5px}
+.logo b{background:#FF2D3D;color:#fff;border-radius:4px;padding:0 4px;margin:0 2px;font-style:normal}
+.logo span{color:#FF2D3D}
+.tag{font-size:11px;color:#8FA3B8;font-weight:600}
+.sum{margin:14px 16px;border-radius:14px;padding:14px;display:flex;gap:12px;align-items:center;border:1px solid}
+.sum.green{background:#12301F;border-color:#1F5A36}.sum.yellow{background:#2A1F12;border-color:#6B4A16}.sum.red{background:#3A1418;border-color:#7A2530}
+.sum .big{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;flex:none;color:#0B1B2D}
+.sum.green .big{background:#2ECC71}.sum.yellow .big{background:#F5A524}.sum.red .big{background:#FF2D3D;color:#fff}
+.sum h1{font-size:16px;font-weight:700}.sum p{font-size:12px;opacity:.75;margin-top:2px}
+.h{font-size:11px;font-weight:700;color:#8FA3B8;letter-spacing:.8px;margin:18px 16px 8px}
+.card{margin:0 16px;background:#11253B;border-radius:12px;overflow:hidden}
+.row{display:flex;align-items:center;gap:10px;padding:11px 12px;border-top:1px solid #1C3149}
+.row:first-child{border-top:0}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.green{}.dot.green{background:#2ECC71}.dot.yellow{background:#F5A524}.dot.red{background:#FF2D3D}.dot.gray{background:#4A5F75}
+.nm{flex:1;font-size:13.5px;font-weight:600;min-width:0}
+.nm small{display:block;font-size:11.5px;color:#8FA3B8;font-weight:500;margin-top:2px}
+.v{font-size:12.5px;font-weight:600;color:#B9C7D6;text-align:right;white-space:nowrap}
+.bar{height:6px;border-radius:3px;background:#1C3149;margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:3px}
+.log .row{align-items:flex-start}
+.t{font-size:11.5px;color:#8FA3B8;width:44px;flex:none;padding-top:1px}
+.chip{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 6px;border-radius:5px;margin-top:4px}
+.c-fixed{background:#173D27;color:#6FE39A}.c-open{background:#3A2E12;color:#F5C76A}.c-source{background:#2A3646;color:#B9C7D6}.c-red{background:#4A1A20;color:#FF8A94}
+.btns{display:flex;gap:8px;margin:16px}
+button{flex:1;background:#11253B;color:#E8EEF5;border:1px solid #24405F;border-radius:10px;padding:11px;font:600 13px inherit;font-family:inherit;cursor:pointer}
+button.pri{background:#FF2D3D;border-color:#FF2D3D;color:#fff}
+button:disabled{opacity:.5}
+.more{display:block;width:100%;text-align:center;padding:10px;font-size:12.5px;color:#8FA3B8;background:none;border:0;border-top:1px solid #1C3149;border-radius:0}
+.note{margin:16px;font-size:11.5px;color:#6F849A;line-height:1.5}
+.empty{padding:14px 12px;font-size:12.5px;color:#8FA3B8}
+.lock{margin:60px 16px;text-align:center;color:#8FA3B8;font-size:14px;line-height:1.6}
+</style></head>
+<body><div class="wrap">
+<div class="top"><div class="logo">90<b>+</b><span>ARTI</span></div><div class="tag" id="tag">SİSTEM DURUMU</div></div>
+<div id="app"><div class="lock">Yükleniyor…</div></div>
+</div>
+<script>
+const FN = 'https://zeoruhodxfchwluczjig.supabase.co/functions/v1/sync';
+const VAPID = 'BDcp5gxnTkiPfrNzVA6sxxKZD41cCFH_Ylpe_1BQohB9r9NhuQK3FbE7UnbGr7wO1CQC73447ExpvzP2T0ciOn0';
+let KEY = '';
+try { const m = /k=([\w-]+)/.exec(location.hash); if (m) { localStorage.setItem('90a-admin', m[1]); history.replaceState(null, '', location.pathname); } KEY = localStorage.getItem('90a-admin') || ''; } catch (_) {}
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const nf = (n) => Number(n).toLocaleString('tr-TR');
+const hm = (iso) => new Date(iso).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Istanbul' });
+const dhm = (iso) => { const d = new Date(iso); const today = new Date().toDateString() === d.toDateString(); return today ? hm(iso) : d.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', timeZone: 'Europe/Istanbul' }); };
+const ago = (s) => s == null ? '—' : s < 60 ? `${Math.round(s)} sn önce` : s < 3600 ? `${Math.round(s / 60)} dk önce` : `${Math.floor(s / 3600)} sa ${Math.round((s % 3600) / 60)} dk önce`;
+const ST = { fixed: ['KENDİ DÜZELDİ', 'c-fixed'], open: ['İZLENİYOR', 'c-open'], source: ['KAYNAKTAN BÖYLE', 'c-source'] };
+let showAll = false, last = null;
+
+async function load() {
+  if (!KEY) { $('#app').innerHTML = '<div class="lock">Bu sayfa yalnızca yöneticiler içindir.<br>Size verilen bağlantıyla açın.</div>'; return; }
+  try {
+    const r = await fetch(`${FN}?mode=health_view&key=${encodeURIComponent(KEY)}`, { cache: 'no-store' });
+    if (r.status === 403) { $('#app').innerHTML = '<div class="lock">Anahtar geçersiz.</div>'; return; }
+    last = await r.json(); render();
+  } catch (e) { $('#tag').textContent = 'BAĞLANTI HATASI'; }
+}
+
+function render() {
+  const { report: R, log } = last;
+  if (!R) { $('#app').innerHTML = '<div class="lock">İlk kontrol bekleniyor (5 dk içinde).</div>'; return; }
+  const lag = (Date.now() - Date.parse(R.at)) / 1000;
+  $('#tag').textContent = 'SİSTEM DURUMU · ' + hm(new Date().toISOString());
+  const sysLog = log.filter((x) => /^(job|quota):/.test(x.key));
+  const dataLog = log.filter((x) => /^(goals|name):/.test(x.key));
+  const reds = R.jobs.filter((j) => j.level === 'red').length + sysLog.filter((x) => x.level === 'red' && x.status === 'open').length;
+  const yel = R.jobs.filter((j) => j.level === 'yellow').length + sysLog.filter((x) => x.level === 'yellow' && x.status === 'open' && !x.key.startsWith('job:')).length;
+  const lvl = reds ? 'red' : yel ? 'yellow' : 'green';
+  const head = reds ? `${reds} sorun var` : yel ? `${yel} uyarı var, diğerleri yolunda` : 'Her şey yolunda';
+  let h = `<div class="sum ${lvl}"><div class="big">${reds ? '!' : yel ? '!' : '✓'}</div><div><h1>${head}</h1><p>Son kontrol ${ago(lag)}</p></div></div>`;
+
+  h += '<div class="h">VERİ AKIŞI</div><div class="card">';
+  for (const j of R.jobs) h += `<div class="row"><div class="dot ${j.level}"></div><div class="nm">${esc(j.label)}<small>${esc(j.note || j.every)}</small></div><div class="v">${j.ago == null ? '—' : ago(j.ago + lag)}</div></div>`;
+  h += '</div>';
+
+  if (R.quotas?.length) {
+    h += '<div class="h">KOTA (BUGÜN)</div><div class="card">';
+    for (const q of R.quotas) { const p = Math.min(100, Math.round(q.used / q.limit * 100)); const c = p >= 95 ? '#FF2D3D' : p >= 80 ? '#F5A524' : '#2ECC71';
+      h += `<div class="row"><div class="nm">${esc(q.name)}<small>${nf(q.used)} / ${nf(q.limit)}</small><div class="bar"><i style="width:${Math.max(p, 1)}%;background:${c}"></i></div></div><div class="v">%${p}</div></div>`; }
+    h += '</div>';
+  }
+
+  const D = R.data || {}, C = R.counts || {};
+  h += '<div class="h">VERİ KONTROLÜ (SON 30 SAAT)</div><div class="card">';
+  h += `<div class="row"><div class="dot ${D.goals ? 'yellow' : 'green'}"></div><div class="nm">Skor ↔ gol olayları uyumu<small>${nf(D.checked || 0)} biten maç kontrol edildi</small></div><div class="v">${D.goals ? D.goals + ' uyumsuz' : 'hepsi uyumlu'}</div></div>`;
+  h += `<div class="row"><div class="dot ${D.names ? 'yellow' : 'green'}"></div><div class="nm">Adı boş gol<small>Tekrar sorulur, en fazla 3 kez</small></div><div class="v">${D.names || 0} maç</div></div>`;
+  const list = showAll ? dataLog : dataLog.slice(0, 5);
+  for (const x of list) { const [t, c] = ST[x.status] || ST.open;
+    h += `<div class="row"><div class="t">${dhm(x.updated_at)}</div><div class="nm">${esc(x.title)}<small>${esc(x.detail)}</small><span class="chip ${c}">${t}</span></div></div>`; }
+  if (dataLog.length > 5) h += `<button class="more" onclick="showAll=!showAll;render()">${showAll ? 'Daha az göster' : `Tümünü göster (${dataLog.length})`}</button>`;
+  h += '</div>';
+
+  h += '<div class="h">SON 24 SAAT</div><div class="card">';
+  h += `<div class="row"><div class="dot green"></div><div class="nm">Bildirim olayları<small>gol, kart, kadro, devre, maç sonu</small></div><div class="v">${nf(C.push || 0)}</div></div>`;
+  h += `<div class="row"><div class="dot green"></div><div class="nm">Eklenen videolar<small>gol videoları ve maç özetleri</small></div><div class="v">${nf(C.clips || 0)}</div></div>`;
+  h += `<div class="row"><div class="dot ${C.appErrors > 20 ? 'yellow' : 'green'}"></div><div class="nm">Uygulama hata kayıtları<small>kullanıcı cihazlarından gelen çökmeler</small></div><div class="v">${nf(C.appErrors || 0)}</div></div>`;
+  h += `<div class="row"><div class="dot green"></div><div class="nm">Aktif akıllı bildirim</div><div class="v">${nf(C.smart || 0)}</div></div>`;
+  h += '</div>';
+
+  h += '<div class="h">SON OLAYLAR</div><div class="card log">';
+  if (!sysLog.length) h += '<div class="empty">Kayıtlı sorun yok.</div>';
+  for (const x of sysLog) { const [t, c] = x.status === 'open' && x.level === 'red' ? ['SORUN', 'c-red'] : x.status === 'fixed' ? ['DÜZELDİ', 'c-fixed'] : ['İZLENİYOR', 'c-open'];
+    h += `<div class="row"><div class="t">${dhm(x.updated_at)}</div><div class="dot ${x.status === 'fixed' ? 'green' : x.level}" style="margin-top:4px"></div><div class="nm">${esc(x.title)}<small>${esc(x.detail)}</small><span class="chip ${c}">${t}</span></div></div>`; }
+  h += '</div>';
+
+  h += `<div class="btns"><button id="run" onclick="runNow()">Şimdi kontrol et</button><button class="pri" id="sub" onclick="subscribe()">Bu cihaza uyarı gönder</button></div>`;
+  h += '<p class="note">Kontrol 5 dakikada bir kendiliğinden çalışır. Kırmızı bir sorun çıkınca (ör. canlı veri 3 dk\'dan fazla gelmezse) uyarı açılan cihazlara bildirim gider; düzelince de haber verir.</p>';
+  $('#app').innerHTML = h;
+  subState();
+}
+
+async function runNow() {
+  const b = $('#run'); b.disabled = true; b.textContent = 'Kontrol ediliyor…';
+  try { await fetch(`${FN}?mode=health&key=${encodeURIComponent(KEY)}`, { cache: 'no-store' }); } catch (_) {}
+  await load();
+}
+function subState() {
+  const b = $('#sub'); if (!b) return;
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) { b.disabled = true; b.textContent = 'Tarayıcı desteklemiyor'; return; }
+  try { if (localStorage.getItem('90a-admin-push') === '1' && Notification.permission === 'granted') { b.textContent = 'Uyarılar açık ✓'; b.classList.remove('pri'); } } catch (_) {}
+}
+async function subscribe() {
+  const b = $('#sub'); b.disabled = true;
+  try {
+    const perm = await Notification.requestPermission();
+    if (perm !== 'granted') { b.textContent = 'İzin verilmedi'; b.disabled = false; return; }
+    const reg = await navigator.serviceWorker.register('/sw.js'); await navigator.serviceWorker.ready;
+    const raw = atob(VAPID.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - VAPID.length % 4) % 4));
+    const key = Uint8Array.from(raw, (c) => c.charCodeAt(0));
+    const sub = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: key });
+    const r = await fetch(`${FN}?mode=admin_reg&key=${encodeURIComponent(KEY)}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: 'web:' + JSON.stringify(sub) }) });
+    if (!(await r.json()).ok) throw new Error('kayıt');
+    try { localStorage.setItem('90a-admin-push', '1'); } catch (_) {}
+    b.textContent = 'Uyarılar açık ✓'; b.classList.remove('pri');
+  } catch (e) { b.textContent = 'Olmadı, tekrar dene'; b.disabled = false; }
+}
+load(); setInterval(load, 60000);
+</script>
+</body></html>

@@ -5,7 +5,7 @@ self.addEventListener('push', (e) => {
   const fid = d.data && d.data.fid;
   e.waitUntil(self.registration.showNotification(d.title || '90Artı', {
     body: d.body || '', icon: '/img/icon-192.png', badge: '/img/favicon.png', tag: fid ? 'm' + fid + ':' + (d.title || '') : undefined,
-    data: { url: fid ? '/match/' + fid : '/' },
+    data: { url: (d.data && d.data.url) || (fid ? '/match/' + fid : '/') },
   }));
 });
 self.addEventListener('notificationclick', (e) => {
