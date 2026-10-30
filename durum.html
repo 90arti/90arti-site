@@ -103,6 +103,17 @@ function render() {
   if (dataLog.length > 5) h += `<button class="more" onclick="showAll=!showAll;render()">${showAll ? 'Daha az göster' : `Tümünü göster (${dataLog.length})`}</button>`;
   h += '</div>';
 
+  // veri sağlayıcı hız karşılaştırması (aynı gol: hangi kaynak önce gördü)
+  const SN = { sm: 'Sportmonks', gs: 'Goalserve' };
+  const sec = (v) => v == null ? '—' : (Math.abs(v) < 1 ? '±0' : (v > 0 ? '+' : '−') + Math.abs(Math.round(v)) + ' sn');
+  h += '<div class="h">HIZ KARŞILAŞTIRMASI</div><div class="card">';
+  if (!last.speed?.length) h += '<div class="empty">Ölçüm sürüyor; iki kaynağın da gördüğü ilk gollerle burada sonuç çıkar.</div>';
+  for (const S of last.speed || []) {
+    h += `<div class="row"><div class="dot ${S.median > 0 ? 'yellow' : 'green'}"></div><div class="nm">${SN[S.src] || S.src} ↔ bizim sistem<small>${S.goals} gol karşılaştırıldı · ${S.otherFaster}'inde ${SN[S.src] || S.src} önce, ${S.afFaster}'inde biz önce</small></div><div class="v">ortanca ${sec(S.median)}</div></div>`;
+    for (const r of S.recent.slice(0, 8)) h += `<div class="row"><div class="t">${hm(r.other_at)}</div><div class="nm">Maç #${r.af_id} · skor ${r.h}-${r.a}</div><div class="v">${sec(r.af_late_sec)}</div></div>`;
+  }
+  h += '<p class="note" style="margin:6px 12px 10px">"+12 sn": golü diğer kaynak bizden 12 sn önce gösterdi. "−5 sn": biz 5 sn önce gösterdik.</p></div>';
+
   h += '<div class="h">SON 24 SAAT</div><div class="card">';
   h += `<div class="row"><div class="dot green"></div><div class="nm">Bildirim olayları<small>gol, kart, kadro, devre, maç sonu</small></div><div class="v">${nf(C.push || 0)}</div></div>`;
   h += `<div class="row"><div class="dot green"></div><div class="nm">Eklenen videolar<small>gol videoları ve maç özetleri</small></div><div class="v">${nf(C.clips || 0)}</div></div>`;
