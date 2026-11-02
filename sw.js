@@ -5,7 +5,7 @@ self.addEventListener('push', (e) => {
   const fid = d.data && d.data.fid;
   e.waitUntil(self.registration.showNotification(d.title || '90Artı', {
     body: d.body || '', icon: '/img/icon-192.png', badge: '/img/favicon.png', tag: fid ? 'm' + fid + ':' + (d.title || '') : undefined,
-    data: { url: (d.data && d.data.url) || (d.data && d.data.video ? '/video/' + d.data.video + '?t=' + encodeURIComponent((d.title || '').replace(/^🎙️\s*/, '')) + (fid ? '&fid=' + fid : '') : fid ? '/match/' + fid : '/') },
+    data: { url: (d.data && d.data.url) || (d.data && d.data.video ? '/video/' + d.data.video + '?t=' + encodeURIComponent((d.title || '').replace(/^🎙️\s*/, '')) + (fid ? '&fid=' + fid : '') : fid ? '/match/' + fid : d.data && d.data.team ? '/team/' + d.data.team : '/') },
   }));
 });
 self.addEventListener('notificationclick', (e) => {
