@@ -1,0 +1,36 @@
+# 90arti.tr arama motoru sayfaları: maç/takım/lig/TV sayfaları + sitemap.xml yarım saatte bir tazelenir.
+# Kaynak: 90arti-app deposu site/seo/ (build-site.sh buraya kopyalar; burada elle değiştirme).
+name: seo
+on:
+  schedule:
+    - cron: '7,37 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: seo
+  cancel-in-progress: false
+jobs:
+  gen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Sayfaları üret
+        run: node seo/gen.mjs .
+      - name: Değişiklik varsa yükle
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "90arti-seo"
+          git config user.email "90artiapp@gmail.com"
+          git add -A
+          if git diff --cached --quiet; then echo "değişiklik yok"; exit 0; fi
+          git commit -q -m "SEO sayfaları $(date -u +%FT%TZ)"
+          git pull -q --rebase || true
+          git push -q
+          gh api -X POST "repos/${GITHUB_REPOSITORY}/pages/builds" >/dev/null || echo "Pages derleme isteği gönderilemedi"
