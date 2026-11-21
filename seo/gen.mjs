@@ -107,7 +107,7 @@ const strip = await get('strip_leagues?select=league_id');
 const LG_IDS = strip.map((r) => r.league_id);
 const leagues = new Map((await getIn('leagues', 'id', LG_IDS, 'id,name,country,logo,season')).map((l) => [l.id, l]));
 const FX_COLS = 'id,league_id,season,round,kickoff,status,elapsed,extra,home_id,away_id,home_goals,away_goals,ht_home,ht_away,venue,referee,pen_home,pen_away';
-const fx = await get(`fixtures?select=${FX_COLS}&league_id=in.(${LG_IDS.join(',')})&kickoff=gte.${iso(NOW - 30 * DAY)}&kickoff=lt.${iso(NOW + 9 * DAY)}&order=kickoff`, true);
+const fx = await get(`fixtures?select=${FX_COLS}&league_id=in.(${LG_IDS.join(',')})&kickoff=gte.${iso(NOW - 30 * DAY)}&kickoff=lt.${iso(NOW + 36 * DAY)}&order=kickoff`, true);
 const fxById = new Map(fx.map((f) => [f.id, f]));
 // TV: son 14 günde yazılmış maç bazında kanallar (lig dışı maçlar da TV sayfasına girsin)
 const tvRows = await get(`tv_match?select=fixture_id,channels&updated_at=gte.${iso(NOW - 14 * DAY)}`, true);
@@ -122,9 +122,9 @@ const teams = new Map((await getIn('teams', 'id', teamIds, 'id,name,logo')).map(
 const tName = (id) => tr(teams.get(id)?.name) || 'Takım';
 const refTFF = new Map((await getIn('match_officials', 'fixture_id', fx.filter((f) => f.league_id === 203 || f.league_id === 204 || f.league_id === 206).map((f) => f.id), 'fixture_id,officials')).map((r) => [r.fixture_id, r.officials]));
 
-// maç sayfası yazılacaklar: -30..+8 gün. Ayrıntı (olaylar/kadro/istatistik) yalnız değişebilecek maçlar için okunur:
+// maç sayfası yazılacaklar: -30..+35 gün (21 Kasım 2026: 3-4 hafta sonraki maç da aransın). Ayrıntı (olaylar/kadro/istatistik) yalnız değişebilecek maçlar için okunur:
 // başlamamış ama 3 saat içinde (kadro), canlı, ya da biteli 1 günden az ve sayfası henüz "son" hâliyle yazılmamış.
-const pageFx = fx.filter((f) => f.kickoff >= iso(NOW - 30 * DAY) && f.kickoff < iso(NOW + 8 * DAY));
+const pageFx = fx.filter((f) => f.kickoff >= iso(NOW - 30 * DAY) && f.kickoff < iso(NOW + 35 * DAY));
 const needDet = pageFx.filter((f) => {
   const k = Date.parse(f.kickoff), m = man[`/match/${f.id}`];
   if (m?.fin && DONE.has(f.status)) return false;
@@ -240,7 +240,7 @@ for (const f of fx) for (const id of [f.home_id, f.away_id]) (byTeam.get(id) ?? 
 for (const [id, list] of byTeam) {
   if (!list.some((f) => f.kickoff >= iso(NOW - 10 * DAY))) continue;
   const N = tName(id), rk = teamRank.get(id), lgR = rk ? leagues.get(rk.lg) : leagues.get(list[list.length - 1].league_id);
-  const past = list.filter((f) => DONE.has(f.status)).slice(-10).reverse(), next = list.filter((f) => !DONE.has(f.status) && f.kickoff >= iso(NOW - 3 * 3600_000)).slice(0, 6);
+  const past = list.filter((f) => DONE.has(f.status)).slice(-10).reverse(), next = list.filter((f) => !DONE.has(f.status) && f.kickoff >= iso(NOW - 3 * 3600_000)).slice(0, 10);
   const nx = next[0];
   const title = `${N} fikstürü, maç sonuçları ve puan durumu${nx ? ` · Sıradaki maç: ${tName(nx.home_id)} - ${tName(nx.away_id)}` : ''} | 90Artı`;
   const desc = `${N} son maç sonuçları, sıradaki maçları, maç saatleri ve yayın kanalları${rk ? `, ${lgFull(lgR)} puan durumunda ${rk.row.rank}. sıra (${rk.row.points} puan)` : ''}. Canlı skor ve kadro 90Artı'da.`;
