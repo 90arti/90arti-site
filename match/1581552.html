@@ -67,14 +67,17 @@
         // İNDİR'e basan telefon uygulamayı kurmuş sayılır: 60 gün gösterme (tarayıcı kurulu uygulamayı göremiyor)
         if(!mob||app||Date.now()-t<864e5||Date.now()-g<60*864e5)return;
         document.body.classList.add('dl90');
-        document.querySelector('#dl90 .go').onclick=function(){try{localStorage.setItem('90a-dl-go',''+Date.now())}catch(e){}};
+        var go=document.querySelector('#dl90 .go');
+        // Android: uygulama kuruluysa aynı sayfayı uygulamada açar (doksanarti://…), değilse Play'e (/indir sayar ve yönlendirir) — 23 Kasım 2026, kullanıcı
+        if(/Android/i.test(ua)) go.href='intent://'+location.pathname.replace(/^\//,'')+'#Intent;scheme=doksanarti;package=com.doksanarti.app;S.browser_fallback_url='+encodeURIComponent(location.origin+'/indir?k=serit')+';end';
+        go.onclick=function(){try{localStorage.setItem('90a-dl-go',''+Date.now())}catch(e){}};
         document.querySelector('#dl90 .x').onclick=function(){document.body.classList.remove('dl90');try{localStorage.setItem('90a-dl-x',''+Date.now())}catch(e){}};
       }catch(e){}})();
     </script>
     <!-- Use static rendering with Expo Router to support running without JavaScript. -->
     <noscript> 90Artı canlı skorları için JavaScript açık olmalı. </noscript>
     <!-- The root element for your Expo app. -->
-    <div id="root"><div id="seo"><nav><a href="/">90Artı Canlı Skor</a> · <a href="/tv">Bugün TV'de hangi maç var</a> · <a href="/leagues">Puan durumları</a> · <a href="/iddaa">İddaa programı</a> · <a href="/news">Spor haberleri</a></nav><h1>Ararat - Alashkert</h1><p><b>Maç sonu</b> · Skor: <b>0 - 2</b> <span class="k">(İY 0-0)</span></p><table><tr><td class="k">Turnuva</td><td><a href="/league/342">Ermenistan Premier League</a> · 12. Hafta</td></tr><tr><td class="k">Tarih / saat</td><td>31 Ekim 2026 Cumartesi, 19:00 (TSİ)</td></tr><tr><td class="k">Stat</td><td>Vazgen Sargsyan Republican Stadium</td></tr><tr><td class="k">Takımlar</td><td><a href="/team/3682">Ararat</a> · <a href="/team/582">Alashkert</a></td></tr></table><!--det--><h2>Goller</h2><ul><li>63' Rafael Jesus · Alashkert</li><li>90+3' D. J. Massoumou · Alashkert</li></ul><!--/det--><h2>Alashkert son maçları</h2><ul><li>24 Eki <a href="/match/1581548">Shirak - Alashkert</a> <b>0 - 1</b></li></ul><p class="k">90Artı: canlı skor, maç sonuçları, ilk 11'ler, istatistikler, puan durumları ve maçların yayınlandığı kanallar. Android ve iPhone uygulaması: <a href="/indir">90arti.tr/indir</a></p></div></div>
+    <div id="root"><div id="seo"><nav><a href="/">90Artı Canlı Skor</a> · <a href="/tv">Bugün TV'de hangi maç var</a> · <a href="/leagues">Puan durumları</a> · <a href="/iddaa">İddaa programı</a> · <a href="/news">Spor haberleri</a></nav><h1>Ararat - Alashkert</h1><p><b>Maç sonu</b> · Skor: <b>0 - 2</b> <span class="k">(İY 0-0)</span></p><table><tr><td class="k">Turnuva</td><td><a href="/league/342">Ermenistan Premier League</a> · 12. Hafta</td></tr><tr><td class="k">Tarih / saat</td><td>31 Ekim 2026 Cumartesi, 19:00 (TSİ)</td></tr><tr><td class="k">Stat</td><td>Vazgen Sargsyan Republican Stadium</td></tr><tr><td class="k">Takımlar</td><td><a href="/team/3682">Ararat</a> · <a href="/team/582">Alashkert</a></td></tr></table><!--det--><h2>Goller</h2><ul><li>63' Rafael Jesus · Alashkert</li><li>90+3' D. J. Massoumou · Alashkert</li></ul><!--/det--><p class="k">90Artı: canlı skor, maç sonuçları, ilk 11'ler, istatistikler, puan durumları ve maçların yayınlandığı kanallar. Android ve iPhone uygulaması: <a href="/indir">90arti.tr/indir</a></p></div></div>
   <script src="/_expo/static/js/web/__expo-metro-runtime-8c088df87a31e4e6accd81c554ec290d.js" defer></script><script src="/_expo/static/js/web/__common-1a1d7299be103f52578b7ce3b2a38a8b.js" defer></script><script src="/_expo/static/js/web/index-86214afeb0e4e0627c9fabfb46c0facc.js" defer></script>
 </body>
 </html>
