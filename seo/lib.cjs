@@ -24,7 +24,7 @@ const EXACT = {
     'Sanliurfa B.Sehir Bld.': 'Şanlıurfa B.Şehir Bld.', 'Onikisubat': 'Onikişubat', 'Karapinar Anadolu': 'Karapınar Anadolu', 'Kilis Genclik': 'Kilis Gençlik', 'Gaziantep Genclik': 'Gaziantep Gençlik',
     'Siran Akademi': 'Şiran Akademi', 'Altinordu': 'Altınordu', 'Afyon Bld. Yuntas': 'Afyon Bld. Yüntaş', 'Aydin B.Sehir Bld.': 'Aydın B.Şehir Bld.', 'Bodrum Dogus': 'Bodrum Doğuş', 'Izmir DSI': 'İzmir DSİ',
     'FK Crvena Zvezda': 'Kızılyıldız', 'Crvena Zvezda': 'Kızılyıldız', 'Crvena Zvezda Belgrade': 'Kızılyıldız', 'Red Star Belgrade': 'Kızılyıldız', 'Crvena Zvezda mts': 'Kızılyıldız',
-    'Shakhtar Donetsk': 'Şahtar Donetsk', 'Dynamo Kyiv': 'Dinamo Kiev', 'Dynamo Kiev': 'Dinamo Kiev',
+    'Dynamo Kyiv': 'Dinamo Kiev', 'Dynamo Kiev': 'Dinamo Kiev',
     'FC Copenhagen': 'Kopenhag', 'FC Kobenhavn': 'Kopenhag', 'FC København': 'Kopenhag',
     'Sporting CP': 'Sporting Lizbon', 'Sporting Lisbon': 'Sporting Lizbon',
     'Olympiakos Piraeus': 'Olympiakos', 'Olympiacos': 'Olympiakos', 'Olympiacos Piraeus': 'Olympiakos',
@@ -35,7 +35,7 @@ const EXACT = {
     'FSV Mainz 05': 'Mainz 05', '1899 Hoffenheim': 'Hoffenheim', 'TSG Hoffenheim': 'Hoffenheim', 'SC Paderborn 07': 'Paderborn',
     'FC Augsburg': 'Augsburg', 'SC Freiburg': 'Freiburg', 'VfB Stuttgart': 'Stuttgart', 'SV Elversberg': 'Elversberg', 'VfL Wolfsburg': 'Wolfsburg',
     '1. FC Heidenheim': 'Heidenheim', '1. FC Kaiserslautern': 'Kaiserslautern', '1. FC Magdeburg': 'Magdeburg', '1. FC Nürnberg': 'Nürnberg',
-    'Dynamo Dresden': 'Dinamo Dresden', 'Eintracht Braunschweig': 'Braunschweig', 'FC St. Pauli': 'St. Pauli', 'Hertha BSC': 'Hertha Berlin',
+    'Eintracht Braunschweig': 'Braunschweig', 'FC St. Pauli': 'St. Pauli', 'Hertha BSC': 'Hertha Berlin',
     'Karlsruher SC': 'Karlsruhe', 'SpVgg Greuther Fürth': 'Greuther Fürth', 'SV Darmstadt 98': 'Darmstadt', 'VfL Bochum': 'Bochum', 'VfL Osnabrück': 'Osnabrück',
     // İngiltere / İspanya / İtalya / Fransa (6 Kasım 2026, kullanıcı: "tara"; Türkiye'de bilinen adlar)
     'Wolves': 'Wolverhampton', 'Sheffield Utd': 'Sheffield United',
@@ -66,6 +66,8 @@ const EXACT = {
     'Dinamo Tbilisi': 'Dinamo Tiflis', 'AEK Athens FC': 'AEK Atina', 'AEK Athens': 'AEK Atina', 'AEK Larnaca': 'AEK Larnaka',
     'Apollon Limassol': 'Apollon Limasol', 'Club Brugge KV': 'Club Brugge',
     'CSKA Sofia': 'CSKA Sofya', 'Levski Sofia': 'Levski Sofya', 'Slavia Sofia': 'Slavia Sofya', 'Lokomotiv Sofia': 'Lokomotiv Sofya', 'CSKA 1948': 'CSKA 1948 Sofya',
+    // 23 Kasım 2026 (kullanıcı bildirimi: "Şahtar" saçma; Türk basını Shakhtar Donetsk yazıyor): şehir kelimesi çevirisinin bozduğu adlar özgün hâliyle
+    'Austria Vienna': 'Austria Wien', 'Austria Wien': 'Austria Wien', 'Austria Vienna (Am)': 'Austria Wien (Am)', 'First Vienna': 'First Vienna', 'IMT Novi Beograd': 'IMT Novi Beograd', 'OFK Beograd': 'OFK Beograd',
     'Anadolu Efes': 'Anadolu Efes', 'Zalgiris Kaunas': 'Zalgiris Kaunas',
 };
 // Lig adları (yalnız ekranda; lig sırası kimlikle ya da Türkçe karşılığı da tanıyan kurallarla belirleniyor)
@@ -87,7 +89,7 @@ const WORDS = [
     ['Beograd', 'Belgrad'], ['Belgrade', 'Belgrad'], ['Kobenhavn', 'Kopenhag'], ['København', 'Kopenhag'], ['Copenhagen', 'Kopenhag'],
     ['Moscow', 'Moskova'], ['Moskva', 'Moskova'], ['Warszawa', 'Varşova'], ['Warsaw', 'Varşova'], ['Vienna', 'Viyana'], ['Wien', 'Viyana'],
     ['München', 'Münih'], ['Munich', 'Münih'], ['Lisbon', 'Lizbon'], ['Lisboa', 'Lizbon'], ['Kyiv', 'Kiev'], ['Athens', 'Atina'],
-    ['Piraeus', 'Pire'], ['Tbilisi', 'Tiflis'], ['Baku', 'Bakü'], ['Thessaloniki', 'Selanik'], ['Budapest', 'Budapeşte'],
+    ['Tbilisi', 'Tiflis'], ['Baku', 'Bakü'], ['Thessaloniki', 'Selanik'],
     ['Brussels', 'Brüksel'], ['Bruxelles', 'Brüksel'], ['Kharkiv', 'Harkov'], ['Odesa', 'Odessa'],
 ];
 // Milli takımlar: ülke adı (U21, Kadın gibi ekler korunur)
