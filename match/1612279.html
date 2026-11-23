@@ -46,10 +46,33 @@
     <link rel="stylesheet" href="/fonts/roboto.css"/></head>
 
   <body>
+    <style>
+      body.dl90{display:flex;flex-direction:column}
+      body.dl90 #root{height:auto;flex:1;min-height:0}
+      #dl90{display:none;flex:none;align-items:center;gap:10px;padding:8px 10px 8px 6px;background:#0B1B2D;border-bottom:1px solid #22344a;font-family:Roboto,system-ui,sans-serif;text-decoration:none}
+      body.dl90 #dl90{display:flex}
+      #dl90 .x{color:#8a97a8;font-size:22px;line-height:1;padding:6px;background:none;border:0;cursor:pointer}
+      #dl90 img{width:42px;height:42px;border-radius:10px}
+      #dl90 .t{flex:1;min-width:0}
+      #dl90 .t b{display:block;color:#fff;font-weight:700;font-size:14.5px}
+      #dl90 .t span{display:block;color:#b9c4d2;font-size:12px;margin-top:2px}
+      #dl90 .go{background:#FF2D3D;color:#fff;font-weight:800;font-size:13px;padding:9px 16px;border-radius:18px;text-decoration:none;white-space:nowrap}
+    </style>
+    <div id="dl90"><button class="x" aria-label="Kapat">×</button><img src="/img/icon-192.png" alt=""><div class="t"><b>90Artı uygulaması</b><span>Android ve iPhone · Ücretsiz</span></div><a class="go" href="/indir?k=serit">İNDİR</a></div>
+    <script>
+      (function(){try{
+        var ua=navigator.userAgent||'', mob=/Android|iPhone|iPad|iPod/i.test(ua);
+        var app=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone;
+        var t=0; try{t=+localStorage.getItem('90a-dl-x')||0}catch(e){}
+        if(!mob||app||Date.now()-t<3*864e5)return;
+        document.body.classList.add('dl90');
+        document.querySelector('#dl90 .x').onclick=function(){document.body.classList.remove('dl90');try{localStorage.setItem('90a-dl-x',''+Date.now())}catch(e){}};
+      }catch(e){}})();
+    </script>
     <!-- Use static rendering with Expo Router to support running without JavaScript. -->
     <noscript> 90Artı canlı skorları için JavaScript açık olmalı. </noscript>
     <!-- The root element for your Expo app. -->
-    <div id="root"><div id="seo"><nav><a href="/">90Artı Canlı Skor</a> · <a href="/tv">Bugün TV'de hangi maç var</a> · <a href="/leagues">Puan durumları</a> · <a href="/iddaa">İddaa programı</a> · <a href="/news">Spor haberleri</a></nav><h1>El Gouna FC - Zamalek SC</h1><p><b>Başlamadı</b></p><table><tr><td class="k">Turnuva</td><td><a href="/league/233">Mısır Premier League</a> · 9. Hafta</td></tr><tr><td class="k">Tarih / saat</td><td>23 Kasım 2026 Pazartesi, 18:00 (TSİ)</td></tr><tr><td class="k">Stat</td><td>El Gouna Stadium</td></tr><tr><td class="k">Takımlar</td><td><a href="/team/1574">El Gouna FC</a> · <a href="/team/1040">Zamalek SC</a></td></tr></table><!--det--><!--/det--><h2>El Gouna FC son maçları</h2><ul><li>30 Eki <a href="/match/1612273">Asyut Petrol - El Gouna FC</a> <b>1 - 1</b></li></ul><h2>Zamalek SC son maçları</h2><ul><li>28 Eki <a href="/match/1612270">Zamalek SC - El Mokawloon</a> <b>2 - 1</b></li><li>24 Eki <a href="/match/1639348">Zamalek SC - APR</a> <b>1 - 0</b></li></ul><p class="k">90Artı: canlı skor, maç sonuçları, ilk 11'ler, istatistikler, puan durumları ve maçların yayınlandığı kanallar. Android ve iPhone uygulaması: <a href="/indir">90arti.tr/indir</a></p></div></div>
+    <div id="root"><div id="seo"><nav><a href="/">90Artı Canlı Skor</a> · <a href="/tv">Bugün TV'de hangi maç var</a> · <a href="/leagues">Puan durumları</a> · <a href="/iddaa">İddaa programı</a> · <a href="/news">Spor haberleri</a></nav><h1>El Gouna FC - Zamalek SC</h1><p><b>Başlamadı</b></p><table><tr><td class="k">Turnuva</td><td><a href="/league/233">Mısır Premier League</a> · 9. Hafta</td></tr><tr><td class="k">Tarih / saat</td><td>23 Kasım 2026 Pazartesi, 18:00 (TSİ)</td></tr><tr><td class="k">Stat</td><td>El Gouna Stadium</td></tr><tr><td class="k">Takımlar</td><td><a href="/team/1574">El Gouna FC</a> · <a href="/team/1040">Zamalek SC</a></td></tr></table><!--det--><h2>İlk 11'ler</h2><p><b>El Gouna FC</b> (4-2-3-1) · Teknik direktör: Alaa Abdel Aal<br>Eslam Risha, Ahmed Belya, Youssef Afifi, Islam Abou Slemma, M. Metawea, Omar El Gazar, Nour El Sayed, T. Ojo, Alaa Shaaban, Ahmed Gamal, Ali El Zahdi<br><span class="k">Yedekler: M. Egbemba, Abdel Gawad Taalab, A. Masoud, Mahmoud Hassouna, Belal El Sayed, Mohamed Reda, W. Parfait Teukeu, Salah Zayed, Ismail Zazaa</span></p><p><b>Zamalek SC</b> (4-2-3-1) · Teknik direktör: Motamed Gamal<br>Al Mahdi Soliman, Omar Gaber, Mohamed Ismail, Mahmoud Hamdi El Wensh, Ahmed Abou El Fotouh, Mohamed Shehata, M. Hamad, Oday Dabbagh, Abdalla El Said, Ahmed Sherif, Chico Banza<br><span class="k">Yedekler: Hossam Ashraf, Naser Mansy, Mohamed Sobhi, M. Bentayg</span></p><!--/det--><h2>El Gouna FC son maçları</h2><ul><li>30 Eki <a href="/match/1612273">Asyut Petrol - El Gouna FC</a> <b>1 - 1</b></li></ul><h2>Zamalek SC son maçları</h2><ul><li>28 Eki <a href="/match/1612270">Zamalek SC - El Mokawloon</a> <b>2 - 1</b></li><li>24 Eki <a href="/match/1639348">Zamalek SC - APR</a> <b>1 - 0</b></li></ul><p class="k">90Artı: canlı skor, maç sonuçları, ilk 11'ler, istatistikler, puan durumları ve maçların yayınlandığı kanallar. Android ve iPhone uygulaması: <a href="/indir">90arti.tr/indir</a></p></div></div>
   <script src="/_expo/static/js/web/__expo-metro-runtime-8c088df87a31e4e6accd81c554ec290d.js" defer></script><script src="/_expo/static/js/web/__common-1a1d7299be103f52578b7ce3b2a38a8b.js" defer></script><script src="/_expo/static/js/web/index-86214afeb0e4e0627c9fabfb46c0facc.js" defer></script>
 </body>
 </html>
