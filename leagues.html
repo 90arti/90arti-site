@@ -62,9 +62,11 @@
       (function(){try{
         var ua=navigator.userAgent||'', mob=/Android|iPhone|iPad|iPod/i.test(ua);
         var app=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone;
-        var t=0; try{t=+localStorage.getItem('90a-dl-x')||0}catch(e){}
-        if(!mob||app||Date.now()-t<3*864e5)return;
+        var t=0,g=0; try{t=+localStorage.getItem('90a-dl-x')||0;g=+localStorage.getItem('90a-dl-go')||0}catch(e){}
+        // İNDİR'e basan telefon uygulamayı kurmuş sayılır: 60 gün gösterme (tarayıcı kurulu uygulamayı göremiyor)
+        if(!mob||app||Date.now()-t<864e5||Date.now()-g<60*864e5)return;
         document.body.classList.add('dl90');
+        document.querySelector('#dl90 .go').onclick=function(){try{localStorage.setItem('90a-dl-go',''+Date.now())}catch(e){}};
         document.querySelector('#dl90 .x').onclick=function(){document.body.classList.remove('dl90');try{localStorage.setItem('90a-dl-x',''+Date.now())}catch(e){}};
       }catch(e){}})();
     </script>
