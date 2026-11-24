@@ -79,9 +79,9 @@
       var id = localStorage.getItem('90a-iid');
       if (!id) { id = (crypto.randomUUID ? crypto.randomUUID() : '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, function (c) { return (c ^ Math.random() * 16 >> c / 4).toString(16); })); localStorage.setItem('90a-iid', id); }
       var K = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inplb3J1aG9keGZjaHdsdWN6amlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxOTgzMDcsImV4cCI6MjEwODc3NDMwN30.c_qfRAu-O6tNKXgx1y2gYQJVoPhLEXw0P8vcKVDTj_Y';
-      fetch('https://zeoruhodxfchwluczjig.supabase.co/rest/v1/rpc/app_open', { method: 'POST', keepalive: true,
+      fetch('https://zeoruhodxfchwluczjig.supabase.co/rest/v1/rpc/ref_hit', { method: 'POST', keepalive: true,
         headers: { apikey: K, Authorization: 'Bearer ' + K, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ p_id: id, p_platform: 'web', p_ver: '', p_ref: (k || 'direkt').slice(0, 30) + '.indir' }) }).catch(function () {});
+        body: JSON.stringify({ p_id: id, p_ref: (k || 'direkt').slice(0, 30) + '.indir' }) }).catch(function () {});
     } catch (e) {}
   }
   ping();
