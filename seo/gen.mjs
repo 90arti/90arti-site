@@ -74,8 +74,8 @@ const score = (f) => (f.home_goals == null || f.status === 'NS' ? '-' : `${f.hom
 const CSS = `<style>#seo{font:15px/1.5 Roboto,Arial,sans-serif;color:#E6EDF5;background:#0B1B2D;padding:16px;max-width:760px;margin:0 auto;overflow:auto;height:100%;box-sizing:border-box}
 #seo a{color:#FF6B76}#seo h1{font-size:21px;margin:4px 0 8px}#seo h2{font-size:17px;margin:18px 0 6px;color:#fff}#seo table{border-collapse:collapse;width:100%;font-size:14px}
 #seo td,#seo th{padding:3px 6px;border-bottom:1px solid #1E3550;text-align:left}#seo ul{padding-left:18px;margin:4px 0}#seo nav{font-size:13px;margin-bottom:8px}#seo .k{color:#9FB2C8}</style>`;
-const NAV = `<nav><a href="/">90Artı Canlı Skor</a> · <a href="/tv">Bugün TV'de hangi maç var</a> · <a href="/leagues">Puan durumları</a> · <a href="/iddaa">İddaa programı</a> · <a href="/news">Spor haberleri</a></nav>`;
-const FOOT = `<p class="k">90Artı: canlı skor, maç sonuçları, ilk 11'ler, istatistikler, puan durumları ve maçların yayınlandığı kanallar. Android ve iPhone uygulaması: <a href="/indir">90arti.tr/indir</a></p>`;
+const NAV = `<nav><a href="/">90Artı Canlı Skor</a> · <a href="/tv">Bugün TV'de hangi maç var</a> · <a href="/leagues">Puan durumları</a> · <a href="/iddaa">İddaa programı</a> · <a href="/news">Spor haberleri</a> · <a href="/rehber">Rehber</a></nav>`;
+const FOOT = `<p class="k">90Artı: canlı skor, maç sonuçları, ilk 11'ler, istatistikler, puan durumları ve maçların yayınlandığı kanallar. Android ve iPhone uygulaması: <a href="/indir">90arti.tr/indir</a> · <a href="/rehber">Rehber</a> · <a href="/hakkimizda">Hakkımızda</a> · <a href="/sss">Sık Sorulan Sorular</a> · <a href="/gizlilik">Gizlilik</a> · <a href="/iletisim">İletişim</a></p>`;
 
 function page({ p, title, desc, body, ld, img }) {
   const url = SITE + (p === '/' ? '/' : p);
@@ -363,10 +363,11 @@ for (const p of Object.keys(man)) {
 }
 
 // ---------- site haritası ----------
+const REHBER = (() => { try { return JSON.parse(fs.readFileSync(path.join(OUT, 'rehber/urls.json'), 'utf8')); } catch { return []; } })();
 const urls = Object.entries(man).sort(([a], [b]) => (a < b ? -1 : 1));
 const pri = (p) => (p === '/' ? '1.0' : p === '/tv' || p.startsWith('/league/') ? '0.8' : p.startsWith('/team/') ? '0.7' : '0.6');
 const cf = (p) => (p === '/' || p === '/tv' ? 'hourly' : p.startsWith('/match/') || p.startsWith('/s/') ? 'hourly' : 'daily');
-const sm = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([p, m]) => `<url><loc>${SITE}${p === '/' ? '/' : p}</loc><lastmod>${m.m}</lastmod><changefreq>${cf(p)}</changefreq><priority>${pri(p)}</priority></url>`).join('\n')}\n<url><loc>${SITE}/indir</loc><changefreq>monthly</changefreq></url>\n</urlset>\n`;
+const sm = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(([p, m]) => `<url><loc>${SITE}${p === '/' ? '/' : p}</loc><lastmod>${m.m}</lastmod><changefreq>${cf(p)}</changefreq><priority>${pri(p)}</priority></url>`).join('\n')}\n<url><loc>${SITE}/indir</loc><changefreq>monthly</changefreq></url>\n${REHBER.map((p) => `<url><loc>${SITE}${p}</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>`).join('\n')}\n</urlset>\n`;
 fs.writeFileSync(path.join(OUT, 'sitemap.xml'), sm);
 fs.writeFileSync(path.join(OUT, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /durum\nDisallow: /seo/\n\nSitemap: ${SITE}/sitemap.xml\n`);
 fs.writeFileSync(MAN_F, JSON.stringify(man));
