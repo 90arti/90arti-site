@@ -86,8 +86,15 @@
   }
   ping();
   function go(url) { setTimeout(function () { location.replace(url); }, 350); }
+  // Android (25 Kasım 2026): Instagram/Facebook uygulama içi tarayıcısı https Play adresini kendi içinde web sayfası
+  // olarak açıyordu (tıklayan çok, kuran az) → doğrudan Play Store uygulaması (intent), açılmazsa web adresi.
+  var AND_APP = 'intent://details?id=com.doksanarti.app#Intent;scheme=market;package=com.android.vending;S.browser_fallback_url=' + encodeURIComponent(AND_URL) + ';end';
+  if (isAnd && AND_LIVE) { document.getElementById('and').href = AND_APP; document.getElementById('and').classList.add('hi'); }
   if (isIOS && IOS_LIVE) go(IOS_URL);
-  else if (isAnd && AND_LIVE) go(AND_URL);
+  else if (isAnd && AND_LIVE) {
+    go(AND_APP);
+    setTimeout(function () { if (!document.hidden) location.replace(AND_URL); }, 2500);
+  }
   else {
     if (isIOS) document.getElementById('ios').classList.add('hi');
     if (isAnd) document.getElementById('and').classList.add('hi');
