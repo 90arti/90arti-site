@@ -90,7 +90,15 @@
   // olarak açıyordu (tıklayan çok, kuran az) → doğrudan Play Store uygulaması (intent), açılmazsa web adresi.
   var AND_APP = 'intent://details?id=com.doksanarti.app#Intent;scheme=market;package=com.android.vending;S.browser_fallback_url=' + encodeURIComponent(AND_URL) + ';end';
   if (isAnd && AND_LIVE) { document.getElementById('and').href = AND_APP; document.getElementById('and').classList.add('hi'); }
-  if (isIOS && IOS_LIVE) go(IOS_URL);
+  // iPhone: uygulama içi tarayıcıda (Instagram, Facebook, X…) App Store uygulamasını doğrudan aç; Safari'de https zaten açar
+  var inApp = /Instagram|FBAN|FBAV|FB_IAB|Twitter|TwitterAndroid|Line\/|Snapchat|TikTok|musical_ly|BytedanceWebview/i.test(ua);
+  var IOS_APP = 'itms-apps://apps.apple.com/tr/app/id6830647151';
+  if (isIOS && IOS_LIVE) { document.getElementById('ios').classList.add('hi'); if (inApp) document.getElementById('ios').href = IOS_APP; }
+  if (isIOS && IOS_LIVE && inApp) {
+    go(IOS_APP);
+    setTimeout(function () { if (!document.hidden) location.replace(IOS_URL); }, 2500);
+  }
+  else if (isIOS && IOS_LIVE) go(IOS_URL);
   else if (isAnd && AND_LIVE) {
     go(AND_APP);
     setTimeout(function () { if (!document.hidden) location.replace(AND_URL); }, 2500);
