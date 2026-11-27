@@ -280,7 +280,7 @@ for (const lid of LG_IDS) {
 const SPN = { bb: 'Basketbol', vb: 'Voleybol' };
 const spTv = new Map((await get(`sp_tv?select=sport,game_id,channels&updated_at=gte.${iso(NOW - 14 * DAY)}`, true)).map((r) => [`${r.sport}:${r.game_id}`, r.channels]));
 const SP_COLS = 'sport,id,league_id,kickoff,status,home_id,away_id,home_score,away_score,periods,venue,league_name,league_country,home_name,away_name,home_logo';
-const spAll = await get(`sp_games_v?select=${SP_COLS}&kickoff=gte.${iso(NOW - 3 * DAY)}&kickoff=lt.${iso(NOW + 6 * DAY)}&order=kickoff`, true);
+const spAll = await get(`sp_games_v?select=${SP_COLS}&sport=in.(bb,vb)&kickoff=gte.${iso(NOW - 3 * DAY)}&kickoff=lt.${iso(NOW + 6 * DAY)}&order=kickoff`, true);
 // önemli ligler: Türkiye, EuroLeague/EuroCup/NBA ve TV'de yayınlanan maçı olan ligler
 const SP_BIG = new Set(['bb:120', 'bb:194', 'bb:12']);
 const tvLg = new Set(spAll.filter((g) => spTv.has(`${g.sport}:${g.id}`)).map((g) => `${g.sport}:${g.league_id}`));
