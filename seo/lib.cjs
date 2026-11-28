@@ -12,6 +12,7 @@ exports.groupPriority = groupPriority;
 exports.lgHead = lgHead;
 exports.leagueSeasonLabel = leagueSeasonLabel;
 exports.roundTR = roundTR;
+exports.roundGeneric = roundGeneric;
 // Tam ad → Türkçe (kulüpler; Maçkolik/Türk basınında yerleşik kullanım)
 const EXACT = {
     // basketbol / voleybol (6 Kasım 2026, kullanıcı: Maçkolik'te Kızılyıldız, Beşiktaş; kaynakta Türkçe harfsiz / sponsorlu)
@@ -328,4 +329,80 @@ function roundTR(r) {
     if (map[r])
         return map[r];
     return roundGeneric(r);
+}
+// 28 Kasım 2026 (kullanıcı: "2. Lig Red Group - 14" İngilizce kalmış, "İngilizce şey kalmasın"): yukarıdaki özel kurallara
+// uymayan tur adları parça parça çevrilir ("A - B - 14" → "A · B · 14. Hafta"); bilinmeyen özel adlar (Bayern, Hessen…) olduğu gibi
+const PART_TR = {
+    'regular season': '', 'group stage': 'Grup Aşaması', 'relegation group': 'Küme Düşme Grubu', 'championship group': 'Şampiyonluk Grubu',
+    'promotion group': 'Çıkış Grubu', 'final group': 'Final Grubu', 'placement group': 'Sıralama Grubu', 'relegation round': 'Küme Düşme Turu',
+    'promotion round': 'Çıkış Turu', 'championship round': 'Şampiyonluk Turu', 'championship playoffs': 'Şampiyonluk Play-off\'u',
+    'relegation play-off': 'Küme Düşme Play-off\'u', 'relegation play-offs': 'Küme Düşme Play-off\'u', 'promotion play-offs': 'Çıkış Play-off\'u',
+    'promotion': 'Çıkış', 'relegation': 'Küme Düşme', 'relegation final': 'Küme Düşme Finali', 'final-relegation': 'Küme Düşme Finali',
+    'losers play offs': 'Kaybedenler Play-off\'u', 'play offs': 'Play-off', 'play-offs': 'Play-off', 'play-off': 'Play-off', 'play out': 'Play-out',
+    'play-in final': 'Play-in Finali', 'super final': 'Süper Final', 'final': 'Final', 'semi-finals': 'Yarı Final', 'quarter-finals': 'Çeyrek Final',
+    'qualification': 'Eleme', 'placement play offs': 'Sıralama Play-off\'u', 'fall season': 'Sonbahar Sezonu', 'fall season gold': 'Sonbahar Sezonu · Altın',
+    'quadrangular': 'Dörtlü Grup', 'regions path': 'Bölgeler Yolu', 'first stage': '1. Aşama', 'second stage': '2. Aşama', 'central': 'Merkez',
+    'northeast': 'Kuzeydoğu', 'northwest': 'Kuzeybatı', 'southeast': 'Güneydoğu', 'southwest': 'Güneybatı',
+    'national league north': 'Kuzey', 'national league south': 'Güney', 'friendly international women': '', 'friendly international': '',
+};
+const COLOR_TR = { red: 'Kırmızı', white: 'Beyaz', blue: 'Mavi', green: 'Yeşil', black: 'Siyah', yellow: 'Sarı' };
+function partTR(p) {
+    const k = p.trim(), lk = k.toLowerCase();
+    if (lk in PART_TR)
+        return PART_TR[lk];
+    if (lk in DIR_TR)
+        return DIR_TR[lk];
+    let m = k.match(/^(.*?)\s*(Red|White|Blue|Green|Black|Yellow) Group$/i); // "2. Lig Red Group"
+    if (m)
+        return `${m[1] ? m[1] + ' ' : ''}${COLOR_TR[m[2].toLowerCase()]} Grup`;
+    m = k.match(/^(.*?)\s*(?:Group|Girone|Grupo|Groupe|Gruppe)\s+([A-Z]|\d+|[IVX]+)$/i); // "Group A", "3. Lig Group 2", "Girone B"
+    if (m) {
+        const g = m[2].toUpperCase();
+        const name = /^\d+$/.test(g) ? `${g}. Grup` : /^[IVX]+$/.test(g) && g.length > 1 ? `Grup ${g}` : `${g} Grubu`;
+        return `${m[1] ? m[1] + ' ' : ''}${name}`;
+    }
+    m = k.match(/^(\d+)(?:st|nd|rd|th) (Preliminary Round|Phase|Round|Qualifying Round)$/i);
+    if (m)
+        return `${m[1]}. ${/prelim|qualif/i.test(m[2]) ? 'Ön Eleme' : /phase/i.test(m[2]) ? 'Aşama' : 'Tur'}`;
+    m = k.match(/^(\d+)(?:st|nd|rd|th) place(?: final)?$/i);
+    if (m)
+        return m[1] === '3' ? 'Üçüncülük Maçı' : `${m[1]}.lik Maçı`;
+    m = k.match(/^Round (\d+)$/i);
+    if (m)
+        return `${m[1]}. Tur`;
+    m = k.match(/^Round of (\d+)$/i);
+    if (m)
+        return `Son ${m[1]}`;
+    m = k.match(/^1\/(\d+)-finals$/i);
+    if (m)
+        return `Son ${Number(m[1]) * 2}`;
+    m = k.match(/^Top (\d+)$/i);
+    if (m)
+        return `İlk ${m[1]}`;
+    m = k.match(/^League (\d+)$/i);
+    if (m)
+        return `${m[1]}. Lig`;
+    m = k.match(/^League ([A-D])$/i);
+    if (m)
+        return `${m[1].toUpperCase()} Ligi`;
+    if (/cup/i.test(k))
+        return ''; // "Greek Cup - 5", "Caf Confederation Cup - 2": kupa adı başlıkta zaten var
+    if (/^sudwest$/i.test(k))
+        return 'Güneybatı';
+    return k;
+}
+function roundGeneric(r) {
+    const parts = r.split(/\s+-\s+/);
+    const out = [];
+    parts.forEach((p, i) => {
+        if (/^\d+$/.test(p.trim()) && i === parts.length - 1 && i > 0) {
+            out.push(/^(semi-finals|quarter-finals|final|play-offs?)$|cup/i.test(parts[i - 1].trim()) ? `${p.trim()}. Maç` : `${p.trim()}. Hafta`);
+        }
+        else {
+            const x = partTR(p);
+            if (x)
+                out.push(x);
+        }
+    });
+    return out.join(' · ');
 }
