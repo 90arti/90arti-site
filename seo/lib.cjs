@@ -325,5 +325,7 @@ function roundTR(r) {
         'Round of 16': 'Son 16', 'Round of 32': 'Son 32', 'Round of 64': 'Son 64', '8th Finals': 'Son 16', '16th Finals': 'Son 32', '1/8-finals': 'Son 16', '1/16-finals': 'Son 32', '1/32-finals': 'Son 64', 'Quarter-finals': 'Çeyrek Final',
         'Semi-finals': 'Yarı Final', Final: 'Final', 'Play-offs': 'Play-off', 'Knockout Round Play-offs': 'Play-off',
     };
-    return map[r] ?? r;
+    if (map[r])
+        return map[r];
+    return roundGeneric(r);
 }

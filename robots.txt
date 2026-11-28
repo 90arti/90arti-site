@@ -1,6 +1,3 @@
 User-agent: *
 Allow: /
 Disallow: /durum
-Disallow: /seo/
-
-Sitemap: https://90arti.tr/sitemap.xml
